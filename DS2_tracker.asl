@@ -200,9 +200,10 @@ startup
     #region memory functions
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
     vars.inventory = new int [] { 0XA8, 0x10, 0x10, 0x00};
-    vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
     vars.soulMemory = new int [] {0xD0,0x490,0xFC};
     vars.gilligan = new int [] { 0x70, 0x20, 0x18, 0x7F} ;
+    // some cheat engine shenanigans, the mentiond above CE table was helpful for that
+    vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
     // based on code from https://github.com/WildBunnie/DarkSoulsII-Archipelago
     vars.world_flags = new int[]{ 0x70, 0x20, 0x18, 0x0 };
     vars.game_state =  new int[]{ 0x24AC };
