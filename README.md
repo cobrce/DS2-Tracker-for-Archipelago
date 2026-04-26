@@ -4,6 +4,7 @@ It tracks Key items and statues nececssary for exploring / finishing the randomi
 
 ![](https://raw.githubusercontent.com/cobrce/DS2-Tracker-for-Archipelago/refs/heads/master/ScreenShot.jpg)
 
+
 # Key items:
 - Soul memory : display the actual value and turn green when it reaches 1 million, it is tracked because it can allow the access to Shrine of winter
 - Silver cat ring / Flying feline boots / Laddersmith Gilligan moved to Majula : satisfying one of these checks is necessary to reach "Grave of saints" and "The black gulch"
@@ -30,6 +31,11 @@ It tracks Key items and statues nececssary for exploring / finishing the randomi
 - Right Cage Statue in Aldia's Keep
 - Statue in Dragon Aerie
 
+# How to use:
+- Right click on live split -> Open layout -> from file -> select "layout.ls"
+- Right click on live split -> Edit layout -> double click on "Scriptable Auto Splitter" -> press "Browse" button and give the correct path for "DS2_tracker.asl"
+
+## if you already have layout (back it up before doing the following) you can simply add a "Scriptable Auto splitter" pointing to "DS2_tracker.asl" and it will automatically add its controls to the layout
 # Todo:
 - Track king's ring
 - Track primordial bonefires (no clue so far)
