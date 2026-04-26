@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Layout version="1.6.1">
   <Mode>Vertical</Mode>
-  <X>2099</X>
-  <Y>33</Y>
+  <X>2079</X>
+  <Y>48</Y>
   <VerticalWidth>448</VerticalWidth>
   <VerticalHeight>1231</VerticalHeight>
   <HorizontalWidth>-1</HorizontalWidth>
@@ -92,15 +92,15 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
         <BackgroundGradient>Plain</BackgroundGradient>
         <Text1>Soul memory</Text1>
-        <Text2>2058942</Text2>
+        <Text2>0</Text2>
         <Font1><![CDATA[AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0ZW0uRHJhd2luZy5Gb250BAAAAAROYW1lBFNpemUFU3R5bGUEVW5pdAEABAQLGFN5c3RlbS5EcmF3aW5nLkZvbnRTdHlsZQIAAAAbU3lzdGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AgAAAAIAAAAGAwAAAAhTZWdvZSBVSQAAgEEF/P///xhTeXN0ZW0uRHJhd2luZy5Gb250U3R5bGUBAAAAB3ZhbHVlX18ACAIAAAAAAAAABfv///8bU3lzdGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAgAAAAs=]]></Font1>
         <Font2><![CDATA[AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0ZW0uRHJhd2luZy5Gb250BAAAAAROYW1lBFNpemUFU3R5bGUEVW5pdAEABAQLGFN5c3RlbS5EcmF3aW5nLkZvbnRTdHlsZQIAAAAbU3lzdGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AgAAAAIAAAAGAwAAAAhTZWdvZSBVSQAAgEEF/P///xhTeXN0ZW0uRHJhd2luZy5Gb250U3R5bGUBAAAAB3ZhbHVlX18ACAIAAAAAAAAABfv///8bU3lzdGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAgAAAAs=]]></Font2>
         <OverrideFont1>False</OverrideFont1>
@@ -134,9 +134,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -155,9 +155,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -176,9 +176,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -197,9 +197,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -218,9 +218,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -266,9 +266,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -287,9 +287,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -308,9 +308,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -329,9 +329,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -350,9 +350,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -371,9 +371,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -413,9 +413,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -476,9 +476,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.4</Version>
-        <TextColor>FF7CFC00</TextColor>
+        <TextColor>FFFFFFFF</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FF7CFC00</TimeColor>
+        <TimeColor>FFFFFFFF</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
