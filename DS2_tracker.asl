@@ -11,6 +11,7 @@ startup
 
     vars.Green = System.Drawing.Color.LawnGreen;
     vars.White = System.Drawing.Color.White;
+    vars.Logged = false;
 
     #region log
 
@@ -115,6 +116,7 @@ startup
 
     vars.DisplayStatues = (Action<bool[]>) ((values) =>
     {
+        vars.SetText("Statues",null);
         if(values.Length == vars.statueNames.Length)
         {
             for (int i = 0;i< values.Length;i++)
@@ -143,6 +145,10 @@ startup
         const int ASHEN_MIST_HEART = 0x0308D330;
         const int SILVERCAT_RING = 0x0268C2A0;
         const int FLYING_FELINE_BOOTS = 0x01477487;
+        const int LENIGRAST_KEY = 0X030836F0;
+
+
+        vars.SetText("Key items",null);
 
 
         var silverCatRing = items.Contains(SILVERCAT_RING);
@@ -157,10 +163,13 @@ startup
         vars.SetColor("Rotunda lockstone",rotundaLockStone? vars.Green : vars.White);
         vars.SetText("Rotunda lockstone"," ");
 
-
         var giantsKinship = items.Contains(GIANTS_KINSHIP);
         vars.SetColor("Giant's Kinship",giantsKinship? vars.Green : vars.White);
         vars.SetText("Giant's Kinship"," ");
+
+        var soldiersKey = items.Contains(SOLDIERS_KEY);
+        vars.SetColor("Soldier key",soldiersKey? vars.Green : vars.White);
+        vars.SetText("Soldier key"," ");
     });
 
     vars.DisplaySoulMemory = (Action<int>)((value)=>
@@ -191,6 +200,7 @@ startup
     #region memory functions
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
     vars.inventory = new int [] { 0XA8, 0x10, 0x10, 0x00};
+    vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
     vars.soulMemory = new int [] {0xD0,0x490,0xFC};
     vars.gilligan = new int [] { 0x70, 0x20, 0x18, 0x7F} ;
     // based on code from https://github.com/WildBunnie/DarkSoulsII-Archipelago
@@ -228,7 +238,7 @@ startup
         "Straid of Olaphis",
         "Black Gulch",
         "Manscorpion Tark",
-        "Black Knight Halberd",
+        "Next to Black Knight Halberd",
         "Chest in Shaded Ruins",
         "Lion Mage Set Statue in Shaded Ruins",
         "Fang Key Statue in Shaded Ruins",
@@ -279,6 +289,21 @@ startup
             var itemID = vars.ReadInt(proc,itemPtr);
             if (itemID != 0)
                 items.Add(itemID);
+        }
+
+
+        // Read key items
+        inventoryPtr = vars.ResolvePointer(proc,baseAddress,vars.base_a,vars.inventory_key);
+
+        for (int i = 0; i < 1000;i++) // arbitrary limit, should stop when find "0" in previousItem
+        {
+            if ((Int64)inventoryPtr == 0)
+                break;
+            var itemID = vars.ReadInt(proc,(IntPtr)(inventoryPtr + 0x14));
+            if (itemID!=0)
+                items.Add(itemID);
+
+            inventoryPtr = vars.ReadPointer(proc,(IntPtr)(inventoryPtr + 0x8));
         }
         return items.ToArray();
     });
