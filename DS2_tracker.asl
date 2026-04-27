@@ -114,6 +114,14 @@ startup
     });
 
 
+    vars.DisplayColoredText = (Action<String,String,bool>)((value1,value2,isGreen) =>
+    {
+        vars.SetColor(value1,isGreen ? vars.Green : vars.White);
+        vars.SetText(value1,value2);
+
+    });
+
+
     vars.DisplayStatues = (Action<bool[]>) ((values) =>
     {
         vars.SetText("Statues",null);
@@ -121,8 +129,7 @@ startup
         {
             for (int i = 0;i< values.Length;i++)
             {
-                vars.SetColor(vars.statueNames[i], values[i] ? vars.Green : vars.White);
-                vars.SetText(vars.statueNames[i]," ");// ,values[i] ? "✓" : " ") ;
+                vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
             }
         }
     });
@@ -149,33 +156,20 @@ startup
 
 
         vars.SetText("Key items",null);
-
-
-        var silverCatRing = items.Contains(SILVERCAT_RING);
-        vars.SetColor("Silver cat ring",silverCatRing? vars.Green : vars.White);
-        vars.SetText("Silver cat ring"," ");
-
-        var flyingFelineBoots = items.Contains(FLYING_FELINE_BOOTS);
-        vars.SetColor("Flying feline boots",flyingFelineBoots? vars.Green : vars.White);
-        vars.SetText("Flying feline boots"," ");
-
-        var rotundaLockStone = items.Contains(ROTUNDA_LOCKSTONE);
-        vars.SetColor("Rotunda lockstone",rotundaLockStone? vars.Green : vars.White);
-        vars.SetText("Rotunda lockstone"," ");
-
-        var giantsKinship = items.Contains(GIANTS_KINSHIP);
-        vars.SetColor("Giant's Kinship",giantsKinship? vars.Green : vars.White);
-        vars.SetText("Giant's Kinship"," ");
-
-        var soldiersKey = items.Contains(SOLDIERS_KEY);
-        vars.SetColor("Soldier key",soldiersKey? vars.Green : vars.White);
-        vars.SetText("Soldier key"," ");
+        vars.DisplayColoredText( "Silver cat ring"," ",items.Contains(SILVERCAT_RING));
+        vars.DisplayColoredText( "Flying feline boots"," ",items.Contains(FLYING_FELINE_BOOTS));
+        vars.DisplayColoredText( "Rotunda lockstone"," ",items.Contains(ROTUNDA_LOCKSTONE));
+        vars.DisplayColoredText( "Giant's Kinship"," ",items.Contains(GIANTS_KINSHIP));
+        vars.DisplayColoredText( "Soldier key"," ",items.Contains(SOLDIERS_KEY));
+        vars.DisplayColoredText( "King's passage"," ",items.Contains(KINGS_PASSAGE));
+        // vars.DisplayColoredText( "Bastille key"," ",items.Contains(BASTILLE_KEY));
+        vars.DisplayColoredText( "Antiquated key"," ",items.Contains(ANTIQUATED_KEY));
+        vars.DisplayColoredText( "Lenigrast key"," ",items.Contains(LENIGRAST_KEY));
     });
 
     vars.DisplaySoulMemory = (Action<int>)((value)=>
     {
-        vars.SetColor("Soul memory", value >= 1000000 ?  vars.Green : vars.White);
-        vars.SetText("Soul memory",value.ToString());
+        vars.DisplayColoredText("Soul memory",value.ToString(), value >= 1000000);
     });
 
     
