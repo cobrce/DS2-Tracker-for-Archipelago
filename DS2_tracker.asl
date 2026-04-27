@@ -135,6 +135,15 @@ startup
     });
 
 
+    vars.DisplayGreatSouls = (Action<bool,bool,bool,bool>)((lostSinner,freyja,ironKing,rotten)=>
+    {
+        var count = (lostSinner ? 1 : 0) + 
+                    (freyja ? 1 : 0) +
+                    (ironKing ? 1 : 0) +
+                    (rotten ? 1 : 0);
+        vars.DisplayColoredText("Great souls",count.ToString(),count ==4);
+    });
+
     vars.DisplayGilliganInMajula = (Action<bool>) ((isInMajula) =>
     {
         vars.SetColor("Laddersmith Gilligan In majula",isInMajula ? vars.Green : vars.White);
@@ -153,7 +162,6 @@ startup
         const int SILVERCAT_RING = 0x0268C2A0;
         const int FLYING_FELINE_BOOTS = 0x01477487;
         const int LENIGRAST_KEY = 0X030836F0;
-
 
         vars.SetText("Key items",null);
         vars.DisplayColoredText( "Silver cat ring"," ",items.Contains(SILVERCAT_RING));
@@ -198,6 +206,11 @@ startup
     vars.gilligan = new int [] { 0x70, 0x20, 0x18, 0x7F} ;
     // some cheat engine shenanigans, the mentiond above CE table was helpful for that
     vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
+    vars.boss_level = new int [] {0x70, 0X28, 0x20, 0x8};// if boss level is not null it means that it has been defeated at least once
+    vars.ROTTEN_INDEX = 0x1A;
+    vars.FREIJA_INDEX = 0xB;
+    vars.IRONKING_INDEx = 0xC;
+    vars.LOSTSINNER_INDEx = 0x17;
     // based on code from https://github.com/WildBunnie/DarkSoulsII-Archipelago
     vars.world_flags = new int[]{ 0x70, 0x20, 0x18, 0x0 };
     vars.game_state =  new int[]{ 0x24AC };
@@ -244,6 +257,37 @@ startup
         "Right Cage Statue in Aldia's Keep",
         "Dragon Aerie"
     };
+
+
+    vars.IsBossDefeatedAtLeastOnce = (Func<Process,IntPtr,int,bool>)((proc,baseAddress,bossIndex)=>
+    {
+        var bossPtr0 = vars.ResolvePointer(proc,baseAddress,vars.base_a,vars.boss_level);
+        var bossPtr =(IntPtr)(vars.ReadPointer(proc,bossPtr0) + (bossIndex * 4));
+        var state = vars.ReadInt(proc,bossPtr);
+        return (state != 0); // if not null it means that the boss already defeated once
+
+    });
+
+    vars.ReadRotten = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
+    {
+        return vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.ROTTEN_INDEX);
+
+    });
+
+    vars.ReadFreyja = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
+    {
+        return vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.FREIJA_INDEX);
+    });
+
+    vars.ReadIronKing = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
+    {
+        return vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.IRONKING_INDEx);
+    });
+
+    vars.ReadLostSinner = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
+    {
+        return vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.LOSTSINNER_INDEx);
+    });
 
     vars.ReadSoulMemory = (Func<Process,IntPtr,int>)((proc,baseAddress)=>
     {
@@ -340,7 +384,9 @@ startup
     #endregion
 
     #region Init controls
+    vars.SetText("Shrine of winter","");
     vars.DisplaySoulMemory(0);
+    vars.DisplayGreatSouls(false,false,false,false);
     vars.DisplayKeyItems(new int[]{});
     vars.DisplayGilliganInMajula(false);
     vars.CreateSeparator(false);
@@ -359,6 +405,13 @@ init
 
 update
 {
+    // great souls
+    vars.DisplayGreatSouls(vars.ReadLostSinner(game,vars.BaseAddress),
+                            vars.ReadFreyja(game,vars.BaseAddress),
+                            vars.ReadIronKing(game,vars.BaseAddress),
+                            vars.ReadRotten(game,vars.BaseAddress));
+
+
     // soul memory
     var soulMemory = vars.ReadSoulMemory(game,vars.BaseAddress);
     vars.DisplaySoulMemory(soulMemory);

@@ -5,12 +5,18 @@ It tracks Key items and statues nececssary for exploring / finishing the randomi
 ![](https://raw.githubusercontent.com/cobrce/DS2-Tracker-for-Archipelago/refs/heads/master/ScreenShot.jpg)
 
 
+# Shrine of winter:
+### This tracks the 2 sufficient conditions that open the "Shrine of winter"
+- Great souls : tracks the number of defeated Great souls boss (Rotten, Freyja, Sinner, Iron king), turns green when 4 defeated
+- Soul memory : display the actual value and turn green when it reaches 1 million
+
 # Key items:
-- Soul memory : display the actual value and turn green when it reaches 1 million, it is tracked because it can allow the access to Shrine of winter
 - Silver cat ring / Flying feline boots / Laddersmith Gilligan moved to Majula : satisfying one of these checks is necessary to reach "Grave of saints" and "The black gulch"
 - Rotunda lockstone : it gives access to "Hunter's copse"
 - Giant's Kinship : necessary to finish the game, it unlocks "Nashandra" boss fight
-- Soldier's Key : gives a different access to "Lost bastille"
+- Soldier's Key / Antiquated key : give access to different regions in  "Lost bastille"
+- King's passage : allows access to "Looking glass knight" and "Shrine of Amana"
+- Lenigrast key : allows upgrading weapons
 
 # Satues:
 - Statue in Things Betwixt
@@ -36,6 +42,8 @@ It tracks Key items and statues nececssary for exploring / finishing the randomi
 - Right click on live split -> Edit layout -> double click on "Scriptable Auto Splitter" -> press "Browse" button and give the correct path for "DS2_tracker.asl"
 
 ## if you already have layout (back it up before doing the following) you can simply add a "Scriptable Auto splitter" pointing to "DS2_tracker.asl" and it will automatically add its controls to the layout
-# Todo:
-- Track king's ring
-- Track primordial bonefires (no clue so far)
+
+# Credit:
+- Thanks to Boblord14 for [cheat engine table](https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition)
+- Thanks to WildBunnie for [DS2 implementation of Archipelago](https://github.com/WildBunnie/DarkSoulsII-Archipelago)
+- Thanks to [drtchops](https://github.com/drtchops/asl) for the the ASL repository
