@@ -11,7 +11,7 @@ startup
 
     vars.Green = System.Drawing.Color.LawnGreen;
     vars.White = System.Drawing.Color.White;
-    vars.Logged = false;
+    vars.archipelago_dll =(IntPtr) 0;
 
     #region log
 
@@ -216,6 +216,9 @@ startup
     vars.game_state =  new int[]{ 0x24AC };
     vars.base_a =(IntPtr)0x16148F0;
 
+    // reading events from archipelago dll
+    vars.archipelago_event_flag_count = 0x72DF08;
+
 
     vars.statueOffsets = new int[,]
     {
@@ -236,6 +239,28 @@ startup
      {0xCA7, 4}, // Unpetrify Left Cage Statue in Aldia's Keep
      {0xCA7, 3}, // Unpetrify Right Cage Statue in Aldia's Keep
      {0xCBD, 1}  // Unpetrify Statue in Dragon Aerie
+    };
+
+    // check those vents in "archipelago.dll"
+    vars.events = new int[]
+    {
+        102000050, // Unpetrify Statue in Things Betwixt                 
+        102640,    // Unpetrify Rosabeth of Melfia                       
+        130000010, // Unpetrify Statue in Heide's Tower of Flame         
+        116000031, // Unpetrify Statue in Lost Bastille                  
+        102741,    // Unpetrify Straid of Olaphis                        
+        125000027, // Unpetrify Statue in Black Gulch                    
+        132000016, // Unpetrify Statue near Manscorpion Tark             
+        132000010, // Unpetrify Statue near Black Knight Halberd         
+        132000018, // Unpetrify Statue Blocking the Chest in Shaded Ruins
+        132000012, // Unpetrify Lion Mage Set Statue in Shaded Ruins     
+        132000014, // Unpetrify Fang Key Statue in Shaded Ruins          
+        132000017, // Unpetrify Warlock Mask Statue in Shaded Ruins      
+        211000030, // Unpetrify Milfanito Entrance Statue                
+        115000050, // Unpetrify Cyclops Statue in Aldia's Keep           
+        115000051, // Unpetrify Left Cage Statue in Aldia's Keep         
+        115000052, // Unpetrify Right Cage Statue in Aldia's Keep        
+        127000030, // Unpetrify Statue in Dragon Aerie                   
     };
 
     vars.statueNames = new string[]{
@@ -363,9 +388,37 @@ startup
         var worldFalgsPtr = vars.ResolvePointer(proc,baseAddress,(IntPtr)vars.base_a,vars.world_flags);
         var worldFlags = vars.ReadInt(proc,(IntPtr)((Int64)worldFalgsPtr + vars.statueOffsets[statueId,0]));
         var value =worldFlags &  (1 << vars.statueOffsets[statueId,1]);
-        
+        if (value!=0)
+            return true;
 
-        return (value != 0);
+
+        if (vars.archipelago_dll == (IntPtr) 0)
+        {
+            foreach (System.Diagnostics.ProcessModule module in proc.Modules)
+            {
+                if(module.ModuleName.ToLower() == "archipelago.dll")
+                {
+                    vars.archipelago_dll = module.BaseAddress;
+                    vars.Logt("Archipelago.dll address", vars.archipelago_dll.ToString("x"));
+                    break;
+                }
+            }
+        }
+        else
+        {
+            var event_flag_countPtr = vars.archipelago_dll + vars.archipelago_event_flag_count;
+            var event_flags = (IntPtr) event_flag_countPtr + 4;
+            var nEvents = vars.ReadInt(proc,(IntPtr)event_flag_countPtr) % 4000; // 4000 is an arbitrary limit, should never happen
+
+            for (int i = 0;i<nEvents;i++)
+            {
+                var eventId = vars.ReadInt(proc,(IntPtr)event_flags + i * 4);
+                if (eventId == vars.events[statueId])
+                    return true;
+            }
+
+        }
+        return false;
     });
 
 
