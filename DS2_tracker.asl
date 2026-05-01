@@ -204,7 +204,7 @@ startup
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
     vars.inventory = new int [] { 0XA8, 0x10, 0x10, 0x00};
     vars.soulMemory = new int [] {0xD0,0x490,0xFC};
-    vars.gilligan = new int [] { 0x70, 0x20, 0x18, 0x7F} ;
+    vars.gilliganInMajulaFlag = new int[] {0x7F,8};
     // some cheat engine shenanigans, the mentiond above CE table was helpful for that
     vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
     vars.boss_level = new int [] {0x70, 0X28, 0x20, 0x8};// if boss level is not null it means that it has been defeated at least once
@@ -379,9 +379,8 @@ startup
 
     vars.GetGilligan = (Func<Process,IntPtr,bool>) ((proc,baseAddress) =>
     {
-        var gilliganPtr = vars.ResolvePointer(proc,baseAddress,vars.base_a,vars.gilligan);
-        // vars.Log(gilliganPtr.ToString("x"));
-        return (vars.ReadInt(proc,gilliganPtr) & 8) != 0;
+        return vars.ReadWorldEvent(proc,baseAddress,vars.gilliganInMajulaFlag[0],vars.gilliganInMajulaFlag[1]);
+    });
 
 
     vars.ReadWorldEvent = (Func<Process,IntPtr,int,int,bool>)((proc,baseAddress,offset,bitIndex)=>
@@ -398,10 +397,8 @@ startup
         if (statueId >= vars.statueOffsets.GetLength(0))
             return false;
 
-        var worldFalgsPtr = vars.ResolvePointer(proc,baseAddress,(IntPtr)vars.base_a,vars.world_flags);
-        var worldFlags = vars.ReadInt(proc,(IntPtr)((Int64)worldFalgsPtr + vars.statueOffsets[statueId,0]));
-        var value =worldFlags &  (1 << vars.statueOffsets[statueId,1]);
-        if (value!=0)
+        var value = vars.ReadWorldEvent(proc,baseAddress,vars.statueOffsets[statueId,0],vars.statueOffsets[statueId,1]);
+        if (value)
             return true;
 
 
