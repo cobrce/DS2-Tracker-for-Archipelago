@@ -5,8 +5,11 @@ state("darksoulsii")
 
 startup
 {
-
-    Console.Clear();
+    try
+    {
+        Console.Clear();
+    }
+    catch{}
     Console.WriteLine(DateTime.Now.ToString());
 
     vars.Green = System.Drawing.Color.LawnGreen;
@@ -95,29 +98,31 @@ startup
 
     #region Update textboxes
 
-    vars.SetText = (Action<String,String>)((Value1,Value2)=>
+    vars.SetText = (Func<String,String,object>)((Value1,Value2)=>
     {
         dynamic component = vars.GetControl(Value1).Component;
         component.Settings.Text1 = Value1;
         if (Value2!=null)
             component.Settings.Text2 = Value2;    
+        return component;
     });
 
 
-    vars.SetColor = (Action<String,System.Drawing.Color>)((controlName,color)=>
+    vars.SetColor = (Func<String,System.Drawing.Color,object>)((controlName,color)=>
     {
         dynamic component = vars.GetControl(controlName).Component;
         component.Settings.OverrideTextColor = true;
         component.Settings.TextColor = color;
         component.Settings.OverrideTimeColor = true;
         component.Settings.TimeColor = color;
+        return component;
     });
 
 
-    vars.DisplayColoredText = (Action<String,String,bool>)((value1,value2,isGreen) =>
+    vars.DisplayColoredText = (Func<String,String,bool,object>)((value1,value2,isGreen) =>
     {
         vars.SetColor(value1,isGreen ? vars.Green : vars.White);
-        vars.SetText(value1,value2);
+        return vars.SetText(value1,value2);
 
     });
 
@@ -164,13 +169,14 @@ startup
         var giantKinship = items.Contains(GIANTS_KINSHIP);
         var kingsRing = items.Contains(KINGS_RING);
 
-        vars.DisplayColoredText("End game",
-            String.Format("[{0}]♛ring + [{1}]kinship",
+        var control = vars.DisplayColoredText("End game",
+            String.Format("[{0}]king's ring + [{1}]giant's  kinship",
                 kingsRing ? "✔": " " ,
                 giantKinship ? "✔": " "),
                 giantKinship && kingsRing
 
             );
+        control.Settings.Display2Rows = true;
 
     });
     vars.DisplayBlackGulch = (Action<int[],bool>)((items,gilligan)=>
@@ -182,12 +188,14 @@ startup
         var silverCatRing = items.Contains(SILVERCAT_RING);
         var flyingFelineBoots = items.Contains(FLYING_FELINE_BOOTS);
 
-        vars.DisplayColoredText("Black gulch", 
-        String.Format("[{0}]SCR / [{1}]FFB / [{2}]gilligan",
+        var control = vars.DisplayColoredText("Black gulch", 
+        String.Format("[{0}]SCR / [{1}]FFB / [{2}]Gilligan",
             silverCatRing ? "✔": " ",
             flyingFelineBoots ? "✔": " ",
             gilligan ? "✔": " "),
             silverCatRing || flyingFelineBoots || gilligan);
+
+        control.Settings.Display2Rows = true;
     });
 
     vars.DisplayShrineOfWinter = (Action<int,bool,int,bool,bool>)((soulMemory,lostSinner,freyja,ironKing,rotten)=>
@@ -197,12 +205,13 @@ startup
                     (freyja == 2 ? 1 : 0) +
                     (ironKing ? 1 : 0) +
                     (rotten ? 1 : 0);
-        vars.DisplayColoredText("Shrine of winter", String.Format("SM {0} / GS {1}{2}",
+        var control = vars.DisplayColoredText("Shrine of winter", String.Format("SM {0} / GS {1}{2}",
                                                                     soulMemory,
                                                                     count,
                                                                     (freyja == 1 ? " (hank! the red orb!)" : "")),
                                 count == 4 || soulMemory > 1000000
                                                                     );
+        control.Settings.Display2Rows = true;
 
     });
 
@@ -212,11 +221,11 @@ startup
          
     if (timer.CurrentTimingMethod != TimingMethod.GameTime)
     {
-        if (DialogResult.Yes ==  
-            MessageBox.Show("This split uses GameTime as timing method, switch now?",
-            "LiveSplit : Eldenring boss timer",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question))
+        // if (DialogResult.Yes ==  
+        //     MessageBox.Show("This split uses GameTime as timing method, switch now?",
+        //     "LiveSplit : Eldenring boss timer",
+        //     MessageBoxButtons.YesNo,
+        //     MessageBoxIcon.Question))
         {
             timer.CurrentTimingMethod = TimingMethod.GameTime;
         }
