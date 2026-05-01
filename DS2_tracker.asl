@@ -6,7 +6,11 @@ state("darksoulsii")
 startup
 {
 
-    Console.Clear();
+    try
+    {
+        Console.Clear();
+    }
+    catch{}
     Console.WriteLine(DateTime.Now.ToString());
 
     vars.Green = System.Drawing.Color.LawnGreen;
