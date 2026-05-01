@@ -204,7 +204,7 @@ startup
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
     vars.inventory = new int [] { 0XA8, 0x10, 0x10, 0x00};
     vars.soulMemory = new int [] {0xD0,0x490,0xFC};
-    vars.gilliganInMajulaFlag = new int[] {0x7F,8};
+    vars.gilliganInMajulaFlag = new int[] {0x7F,3};
     // some cheat engine shenanigans, the mentiond above CE table was helpful for that
     vars.inventory_key = new int [] { 0XA8, 0x10, 0x10, 0x18, 0x190};
     vars.boss_level = new int [] {0x70, 0X28, 0x20, 0x8};// if boss level is not null it means that it has been defeated at least once
