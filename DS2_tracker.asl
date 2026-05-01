@@ -135,40 +135,18 @@ startup
     });
 
 
-    vars.DisplayGreatSouls = (Action<bool,int,bool,bool>)((lostSinner,freyja,ironKing,rotten)=>
-    {
-        var count = (lostSinner ? 1 : 0) + 
-                    (freyja == 2 ? 1 : 0) +
-                    (ironKing ? 1 : 0) +
-                    (rotten ? 1 : 0);
-        
-        vars.DisplayColoredText("Great souls",count.ToString() + (freyja == 1 ? " (hank! the red orb!)" : ""),count ==4);
-    });
-
-    vars.DisplayGilliganInMajula = (Action<bool>) ((isInMajula) =>
-    {
-        vars.SetColor("Laddersmith Gilligan In majula",isInMajula ? vars.Green : vars.White);
-        vars.SetText("Laddersmith Gilligan In majula"," ");
-    });
-
     vars.DisplayKeyItems= (Action<int[]>) ((items)=>
     {
         const int SOLDIERS_KEY = 0x03041840;
-        const int KINGS_PASSAGE = 0x03043F50;
         const int BASTILLE_KEY = 0x03072580;
         const int ANTIQUATED_KEY = 0x0307C1C0;
         const int ROTUNDA_LOCKSTONE = 0x03088510;
-        const int GIANTS_KINSHIP = 0x0308AC20;
         const int ASHEN_MIST_HEART = 0x0308D330;
-        const int SILVERCAT_RING = 0x0268C2A0;
-        const int FLYING_FELINE_BOOTS = 0x01477487;
         const int LENIGRAST_KEY = 0X030836F0;
+        const int KINGS_PASSAGE = 0x03043F50;
 
         vars.SetText("Key items",null);
-        vars.DisplayColoredText( "Silver cat ring"," ",items.Contains(SILVERCAT_RING));
-        vars.DisplayColoredText( "Flying feline boots"," ",items.Contains(FLYING_FELINE_BOOTS));
         vars.DisplayColoredText( "Rotunda lockstone"," ",items.Contains(ROTUNDA_LOCKSTONE));
-        vars.DisplayColoredText( "Giant's Kinship"," ",items.Contains(GIANTS_KINSHIP));
         vars.DisplayColoredText( "Soldier key"," ",items.Contains(SOLDIERS_KEY));
         vars.DisplayColoredText( "King's passage"," ",items.Contains(KINGS_PASSAGE));
         // vars.DisplayColoredText( "Bastille key"," ",items.Contains(BASTILLE_KEY));
@@ -176,12 +154,58 @@ startup
         vars.DisplayColoredText( "Lenigrast key"," ",items.Contains(LENIGRAST_KEY));
     });
 
-    vars.DisplaySoulMemory = (Action<int>)((value)=>
+    vars.DisplayEndGame = (Action<int[]>)((items)=>
     {
-        vars.DisplayColoredText("Soul memory",value.ToString(), value >= 1000000);
+
+        const int GIANTS_KINSHIP = 0x0308AC20;
+        const int KINGS_RING = 0x026A2230;
+
+
+        var giantKinship = items.Contains(GIANTS_KINSHIP);
+        var kingsRing = items.Contains(KINGS_RING);
+
+        vars.DisplayColoredText("End game",
+            String.Format("[{0}]♛ring + [{1}]kinship",
+                kingsRing ? "✔": " " ,
+                giantKinship ? "✔": " "),
+                giantKinship && kingsRing
+
+            );
+
+    });
+    vars.DisplayBlackGulch = (Action<int[],bool>)((items,gilligan)=>
+    {
+
+        const int SILVERCAT_RING = 0x0268C2A0;
+        const int FLYING_FELINE_BOOTS = 0x01477487;
+        
+        var silverCatRing = items.Contains(SILVERCAT_RING);
+        var flyingFelineBoots = items.Contains(FLYING_FELINE_BOOTS);
+
+        vars.DisplayColoredText("Black gulch", 
+        String.Format("[{0}]SCR / [{1}]FFB / [{2}]gilligan",
+            silverCatRing ? "✔": " ",
+            flyingFelineBoots ? "✔": " ",
+            gilligan ? "✔": " "),
+            silverCatRing || flyingFelineBoots || gilligan);
     });
 
-    
+    vars.DisplayShrineOfWinter = (Action<int,bool,int,bool,bool>)((soulMemory,lostSinner,freyja,ironKing,rotten)=>
+    {
+
+        var count = (lostSinner ? 1 : 0) + 
+                    (freyja == 2 ? 1 : 0) +
+                    (ironKing ? 1 : 0) +
+                    (rotten ? 1 : 0);
+        vars.DisplayColoredText("Shrine of winter", String.Format("SM {0} / GS {1}{2}",
+                                                                    soulMemory,
+                                                                    count,
+                                                                    (freyja == 1 ? " (hank! the red orb!)" : "")),
+                                count == 4 || soulMemory > 1000000
+                                                                    );
+
+    });
+
     #endregion
 
     #region Correct timing method
@@ -380,6 +404,7 @@ startup
     vars.GetGilligan = (Func<Process,IntPtr,bool>) ((proc,baseAddress) =>
     {
         return vars.ReadWorldEvent(proc,baseAddress,vars.gilliganInMajulaFlag[0],vars.gilliganInMajulaFlag[1]);
+        
     });
 
 
@@ -447,11 +472,10 @@ startup
     #endregion
 
     #region Init controls
-    vars.SetText("Shrine of winter","");
-    vars.DisplaySoulMemory(0);
-    vars.DisplayGreatSouls(false,0,false,false);
+    vars.DisplayShrineOfWinter(0,false,0,false,false);
+    vars.DisplayBlackGulch(new int[]{},false);
+    vars.DisplayEndGame(new int[]{});
     vars.DisplayKeyItems(new int[]{});
-    vars.DisplayGilliganInMajula(false);
     vars.CreateSeparator(false);
     vars.DisplayStatues(new bool[vars.statueNames.Length]);
     #endregion
@@ -469,23 +493,20 @@ init
 update
 {
     // great souls
-    vars.DisplayGreatSouls(vars.ReadLostSinner(game,vars.BaseAddress),
+    vars.DisplayShrineOfWinter(vars.ReadSoulMemory(game,vars.BaseAddress),
+                            vars.ReadLostSinner(game,vars.BaseAddress),
                             vars.ReadFreyja(game,vars.BaseAddress),
                             vars.ReadIronKing(game,vars.BaseAddress),
                             vars.ReadRotten(game,vars.BaseAddress));
 
 
-    // soul memory
-    var soulMemory = vars.ReadSoulMemory(game,vars.BaseAddress);
-    vars.DisplaySoulMemory(soulMemory);
 
     // key items
     var items = vars.ReadInventory(game,vars.BaseAddress);
-    vars.DisplayKeyItems(items);
-
-    // is gilligan inn majula
     var gilligan = vars.GetGilligan(game,vars.BaseAddress);
-    vars.DisplayGilliganInMajula(gilligan);
+    vars.DisplayBlackGulch(items,gilligan);
+    vars.DisplayEndGame(items);
+    vars.DisplayKeyItems(items);
 
     // petrified statues
     var values = new bool[vars.statueOffsets.GetLength(0)];
