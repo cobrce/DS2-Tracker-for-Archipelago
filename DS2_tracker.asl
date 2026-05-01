@@ -135,13 +135,14 @@ startup
     });
 
 
-    vars.DisplayGreatSouls = (Action<bool,bool,bool,bool>)((lostSinner,freyja,ironKing,rotten)=>
+    vars.DisplayGreatSouls = (Action<bool,int,bool,bool>)((lostSinner,freyja,ironKing,rotten)=>
     {
         var count = (lostSinner ? 1 : 0) + 
-                    (freyja ? 1 : 0) +
+                    (freyja == 2 ? 1 : 0) +
                     (ironKing ? 1 : 0) +
                     (rotten ? 1 : 0);
-        vars.DisplayColoredText("Great souls",count.ToString(),count ==4);
+        
+        vars.DisplayColoredText("Great souls",count.ToString() + (freyja == 1 ? " (hank! the red orb!)" : ""),count ==4);
     });
 
     vars.DisplayGilliganInMajula = (Action<bool>) ((isInMajula) =>
@@ -211,6 +212,7 @@ startup
     vars.FREIJA_INDEX = 0xB;
     vars.IRONKING_INDEx = 0xC;
     vars.LOSTSINNER_INDEx = 0x17;
+    vars.freyjaGreatSoulsEmbracedFlag = new int[] {0x41,3};
     // based on code from https://github.com/WildBunnie/DarkSoulsII-Archipelago
     vars.world_flags = new int[]{ 0x70, 0x20, 0x18, 0x0 };
     vars.game_state =  new int[]{ 0x24AC };
@@ -299,9 +301,11 @@ startup
 
     });
 
-    vars.ReadFreyja = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
+    vars.ReadFreyja = (Func<Process,IntPtr,int>)((proc,baseAddress)=>
     {
-        return vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.FREIJA_INDEX);
+        var greateSoulEmbraced = vars.ReadWorldEvent(proc,baseAddress,vars.freyjaGreatSoulsEmbracedFlag[0],vars.freyjaGreatSoulsEmbracedFlag[1]);
+        var bossDefeated = vars.IsBossDefeatedAtLeastOnce(proc,baseAddress,vars.FREIJA_INDEX);
+        return (greateSoulEmbraced ? 1 : 0) + (bossDefeated ? 1 : 0);
     });
 
     vars.ReadIronKing = (Func<Process,IntPtr,bool>)((proc,baseAddress)=>
@@ -378,6 +382,15 @@ startup
         var gilliganPtr = vars.ResolvePointer(proc,baseAddress,vars.base_a,vars.gilligan);
         // vars.Log(gilliganPtr.ToString("x"));
         return (vars.ReadInt(proc,gilliganPtr) & 8) != 0;
+
+
+    vars.ReadWorldEvent = (Func<Process,IntPtr,int,int,bool>)((proc,baseAddress,offset,bitIndex)=>
+    {
+        var worldFalgsPtr = vars.ResolvePointer(proc,baseAddress,(IntPtr)vars.base_a,vars.world_flags);
+        var worldFlags = vars.ReadInt(proc,(IntPtr)((Int64)worldFalgsPtr + offset));
+        var value = worldFlags &  (1 << bitIndex);
+        return value!=0;
+
     });
 
     vars.GetStatue = (Func<Process,IntPtr,int,bool>)((proc,baseAddress,statueId) => 
@@ -439,7 +452,7 @@ startup
     #region Init controls
     vars.SetText("Shrine of winter","");
     vars.DisplaySoulMemory(0);
-    vars.DisplayGreatSouls(false,false,false,false);
+    vars.DisplayGreatSouls(false,0,false,false);
     vars.DisplayKeyItems(new int[]{});
     vars.DisplayGilliganInMajula(false);
     vars.CreateSeparator(false);
