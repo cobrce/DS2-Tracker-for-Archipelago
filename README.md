@@ -2,7 +2,7 @@ This is a tracker for Dark Souls II Scholar of The First Sin obtimized for Archi
 
 It tracks Key items and statues nececssary for exploring / finishing the randomized Archipelago game
 
-![](https://raw.githubusercontent.com/cobrce/DS2-Tracker-for-Archipelago/refs/heads/master/ScreenShot.jpg)
+![](https://raw.githubusercontent.com/cobrce/DS2-Tracker-for-Archipelago/refs/heads/compact/ScreenShot.jpg)
 
 
 # Shrine of winter:
