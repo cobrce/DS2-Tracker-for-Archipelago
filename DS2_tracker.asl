@@ -281,7 +281,7 @@ startup
     {
         102000050, // Unpetrify Statue in Things Betwixt                 
         102640,    // Unpetrify Rosabeth of Melfia                       
-        130000010, // Unpetrify Statue in Heide's Tower of Flame         
+        132000010, // Unpetrify Statue in Heide's Tower of Flame         
         116000031, // Unpetrify Statue in Lost Bastille                  
         102741,    // Unpetrify Straid of Olaphis                        
         125000027, // Unpetrify Statue in Black Gulch                    
