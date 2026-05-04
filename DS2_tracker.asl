@@ -38,38 +38,45 @@ startup
     
     #region Create/Find Textboxes
     var controls = new Dictionary<String,LiveSplit.UI.Components.ILayoutComponent>();
-    vars.GetControl = (Func<String,object>)((controlName)=>
+    // find existing control or return null
+    vars.FindControl = (Func<String,LiveSplit.UI.Components.ILayoutComponent>)((controlName) =>
     {
         LiveSplit.UI.Components.ILayoutComponent control = null;
-        if (!controls.TryGetValue(controlName,out control))
+        if (controls.TryGetValue(controlName,out control))
+            return control;
+
+        foreach (var c in timer.Layout.LayoutComponents) // try to find it in layout
         {
-            foreach (var c in timer.Layout.LayoutComponents) // try to find it in layout
+            try
             {
-                try
+                dynamic comp = c.Component;
+                if (comp.Settings.Text1 == controlName)
                 {
-                    dynamic comp = c.Component;
-                    if (comp.Settings.Text1 == controlName)
-                    {
-                            controls[controlName] = control =  c;
-                            vars.Logt("control found", controlName);
-                            break;
-                    }
-                }
-                catch 
-                {
-                    
+                        controls[controlName] =  c;
+                        vars.Logt("control found", controlName);
+                        return (LiveSplit.UI.Components.ILayoutComponent)c;
                 }
             }
-            if (control == null)
+            catch 
             {
-                controls[controlName]= control = LiveSplit.UI.Components.ComponentManager.LoadLayoutComponent("LiveSplit.Text.dll",timer);
-                vars.Logt("control created", controlName);
+                
             }
-            if (!timer.Layout.LayoutComponents.Contains(control))
-            {
-                vars.Logt("control added", controlName);
-                timer.Layout.LayoutComponents.Add(control);
-            }
+        }
+        return null;
+    });
+    // find or create control
+    vars.GetControl = (Func<String,object>)((controlName)=>
+    {
+        LiveSplit.UI.Components.ILayoutComponent control = vars.FindControl(controlName);
+        if (control == null)
+        {
+            controls[controlName]= control = LiveSplit.UI.Components.ComponentManager.LoadLayoutComponent("LiveSplit.Text.dll",timer);
+            vars.Logt("control created", controlName);
+        }
+        if (!timer.Layout.LayoutComponents.Contains(control))
+        {
+            vars.Logt("control added", controlName);
+            timer.Layout.LayoutComponents.Add(control);
         }
         return (object)control;
 
@@ -107,6 +114,24 @@ startup
         return component;
     });
 
+    vars.RemoveControl = (Action<String>)((controlName)=>
+    {
+        var control = vars.FindControl(controlName);
+        // if (control == null)// for some reason livesplit hates returning nothing;
+        //     return;
+        if (control != null) 
+        {
+            vars.Log("removing");
+            controls.Remove(controlName);
+            var components = (ICollection<LiveSplit.UI.Components.ILayoutComponent>) timer.Layout.LayoutComponents;
+            components.Remove(control);
+        }
+            
+        
+
+
+    });
+
 
     vars.SetColor = (Func<String,System.Drawing.Color,object>)((controlName,color)=>
     {
@@ -127,14 +152,28 @@ startup
     });
 
 
-    vars.DisplayStatues = (Action<bool[]>) ((values) =>
+    vars.DisplayStatues = (Action<bool,bool[]>) ((display,values) =>
     {
-        vars.SetText("Statues",null);
+        if (display)
+        { 
+            vars.SetText("Statues",null);
+        }
+        else
+        { 
+            vars.RemoveControl("Statues");
+        }
         if(values.Length == vars.statueNames.Length)
         {
             for (int i = 0;i< values.Length;i++)
             {
-                vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
+                if (display)
+                {
+                    vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
+                }
+                else
+                {
+                    vars.RemoveControl(vars.statueNames[i]);
+                }
             }
         }
     });
@@ -231,7 +270,6 @@ startup
         }
     }
     #endregion
-
 
     #region memory functions
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
@@ -480,13 +518,18 @@ startup
 
     #endregion
 
+    #region Config
+    settings.Add("Compact");
+    settings.Add("Statues");
+    #endregion
+
     #region Init controls
     vars.DisplayShrineOfWinter(0,false,0,false,false);
     vars.DisplayBlackGulch(new int[]{},false);
     vars.DisplayEndGame(new int[]{});
     vars.DisplayKeyItems(new int[]{});
     vars.CreateSeparator(false);
-    vars.DisplayStatues(new bool[vars.statueNames.Length]);
+    vars.DisplayStatues(false,new bool[vars.statueNames.Length]);
     #endregion
 
 }
@@ -523,7 +566,7 @@ update
     {
         values[i] = vars.GetStatue(game,vars.BaseAddress,i);
     }
-    vars.DisplayStatues(values);
+    vars.DisplayStatues(settings["Statues"],values);
 }
 
 onReset
