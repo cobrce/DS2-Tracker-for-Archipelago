@@ -152,9 +152,13 @@ startup
     });
 
 
-    vars.DisplayStatues = (Action<bool,bool[]>) ((display,values) =>
+    vars.DisplayStatues = (Action<bool[],bool[]>) ((display,values) =>
     {
-        if (display)
+        bool displayTitle = false;
+        foreach (var d in display)
+            displayTitle |= d;
+        
+        if (displayTitle)
         { 
             vars.SetText("Statues",null);
         }
@@ -166,7 +170,7 @@ startup
         {
             for (int i = 0;i< values.Length;i++)
             {
-                if (display)
+                if (display[i])
                 {
                     vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
                 }
@@ -521,6 +525,10 @@ startup
     #region Config
     settings.Add("Compact");
     settings.Add("Statues");
+    foreach (var statue in vars.statueNames)
+    {
+        settings.Add(statue,true,statue,"Statues");
+    }
     #endregion
 
     #region Init controls
@@ -529,7 +537,7 @@ startup
     vars.DisplayEndGame(new int[]{});
     vars.DisplayKeyItems(new int[]{});
     vars.CreateSeparator(false);
-    vars.DisplayStatues(false,new bool[vars.statueNames.Length]);
+    // vars.DisplayStatues(false,new bool[vars.statueNames.Length]);
     #endregion
 
 }
@@ -562,11 +570,14 @@ update
 
     // petrified statues
     var values = new bool[vars.statueOffsets.GetLength(0)];
+    var display = new bool[vars.statueOffsets.GetLength(0)];
     for (int i = 0;i< vars.statueOffsets.GetLength(0);i++)
     {
         values[i] = vars.GetStatue(game,vars.BaseAddress,i);
+        display[i] = settings[vars.statueNames[i]];
     }
-    vars.DisplayStatues(settings["Statues"],values);
+
+    vars.DisplayStatues(display,values);
 }
 
 onReset
