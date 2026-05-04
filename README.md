@@ -37,6 +37,9 @@ It tracks Key items and statues nececssary for exploring / finishing the randomi
 - Right Cage Statue in Aldia's Keep
 - Statue in Dragon Aerie
 
+### You can select which statue to track from right click -> Edit layout -> layout settings -> Scriptable Auto Splitter -> "Statues" check box
+![](https://raw.githubusercontent.com/cobrce/DS2-Tracker-for-Archipelago/refs/heads/compact/select.gif)
+
 ### Due to the way archipelago.dll works, statues depetrification are not updated in game until the player enters the area containing that statue, to speed up detection an experimental* way of detecting events directly from that dll is used.
 *too lazy to implement that function for every version of the dll, I'm using a static RVA based on the v0.6.0-alpha.2 version
 

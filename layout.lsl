@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Layout version="1.6.1">
   <Mode>Vertical</Mode>
-  <X>2098</X>
+  <X>2099</X>
   <Y>31</Y>
-  <VerticalWidth>416</VerticalWidth>
-  <VerticalHeight>1113</VerticalHeight>
+  <VerticalWidth>449</VerticalWidth>
+  <VerticalHeight>1169</VerticalHeight>
   <HorizontalWidth>-1</HorizontalWidth>
   <HorizontalHeight>-1</HorizontalHeight>
   <Settings>
@@ -44,6 +44,27 @@
   </Settings>
   <Components>
     <Component>
+      <Path>LiveSplit.Title.dll</Path>
+      <Settings>
+        <Version>1.7.3</Version>
+        <ShowGameName>True</ShowGameName>
+        <ShowCategoryName>True</ShowCategoryName>
+        <ShowAttemptCount>False</ShowAttemptCount>
+        <ShowFinishedRunsCount>False</ShowFinishedRunsCount>
+        <OverrideTitleColor>False</OverrideTitleColor>
+        <SingleLine>True</SingleLine>
+        <TitleColor>FFFFFFFF</TitleColor>
+        <BackgroundColor>FF000000</BackgroundColor>
+        <BackgroundColor2>00131313</BackgroundColor2>
+        <BackgroundGradient>Vertical</BackgroundGradient>
+        <DisplayGameIcon>True</DisplayGameIcon>
+        <ShowRegion>False</ShowRegion>
+        <ShowPlatform>False</ShowPlatform>
+        <ShowVariables>True</ShowVariables>
+        <TextAlignment>0</TextAlignment>
+      </Settings>
+    </Component>
+    <Component>
       <Path>LiveSplit.Timer.dll</Path>
       <Settings>
         <Version>1.5</Version>
@@ -82,7 +103,7 @@
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
         <BackgroundGradient>Plain</BackgroundGradient>
         <Text1>Shrine of winter</Text1>
-        <Text2>SM 462608 / GS 1</Text2>
+        <Text2>SM 573998 / GS 2</Text2>
         <Display2Rows>True</Display2Rows>
         <CustomVariable>False</CustomVariable>
       </Settings>
@@ -99,7 +120,7 @@
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
         <BackgroundGradient>Plain</BackgroundGradient>
         <Text1>Black gulch</Text1>
-        <Text2>[✔]SCR / [ ]FFB / [ ]gilligan</Text2>
+        <Text2>[✔]SCR / [ ]FFB / [ ]Gilligan</Text2>
         <Display2Rows>True</Display2Rows>
         <CustomVariable>False</CustomVariable>
       </Settings>
@@ -116,7 +137,7 @@
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
         <BackgroundGradient>Plain</BackgroundGradient>
         <Text1>End game</Text1>
-        <Text2>[ ]♛ ring + [✔]kinship</Text2>
+        <Text2>[ ]king's ring + [✔]giant's  kinship</Text2>
         <Display2Rows>True</Display2Rows>
         <CustomVariable>False</CustomVariable>
       </Settings>
@@ -165,9 +186,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.5</Version>
-        <TextColor>FFFFFFFF</TextColor>
+        <TextColor>FF7CFC00</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FFFFFFFF</TimeColor>
+        <TimeColor>FF7CFC00</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -336,9 +357,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.5</Version>
-        <TextColor>FFFFFFFF</TextColor>
+        <TextColor>FF7CFC00</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FFFFFFFF</TimeColor>
+        <TimeColor>FF7CFC00</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
@@ -387,9 +408,9 @@
       <Path>LiveSplit.Text.dll</Path>
       <Settings>
         <Version>1.5</Version>
-        <TextColor>FFFFFFFF</TextColor>
+        <TextColor>FF7CFC00</TextColor>
         <OverrideTextColor>True</OverrideTextColor>
-        <TimeColor>FFFFFFFF</TimeColor>
+        <TimeColor>FF7CFC00</TimeColor>
         <OverrideTimeColor>True</OverrideTimeColor>
         <BackgroundColor>00FFFFFF</BackgroundColor>
         <BackgroundColor2>00FFFFFF</BackgroundColor2>
