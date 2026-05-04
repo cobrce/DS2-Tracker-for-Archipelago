@@ -5,6 +5,7 @@ state("darksoulsii")
 
 startup
 {
+
     try
     {
         Console.Clear();
