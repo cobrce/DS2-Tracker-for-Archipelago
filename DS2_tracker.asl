@@ -39,38 +39,45 @@ startup
     
     #region Create/Find Textboxes
     var controls = new Dictionary<String,LiveSplit.UI.Components.ILayoutComponent>();
-    vars.GetControl = (Func<String,object>)((controlName)=>
+    // find existing control or return null
+    vars.FindControl = (Func<String,LiveSplit.UI.Components.ILayoutComponent>)((controlName) =>
     {
         LiveSplit.UI.Components.ILayoutComponent control = null;
-        if (!controls.TryGetValue(controlName,out control))
+        if (controls.TryGetValue(controlName,out control))
+            return control;
+
+        foreach (var c in timer.Layout.LayoutComponents) // try to find it in layout
         {
-            foreach (var c in timer.Layout.LayoutComponents) // try to find it in layout
+            try
             {
-                try
+                dynamic comp = c.Component;
+                if (comp.Settings.Text1 == controlName)
                 {
-                    dynamic comp = c.Component;
-                    if (comp.Settings.Text1 == controlName)
-                    {
-                            controls[controlName] = control =  c;
-                            vars.Logt("control found", controlName);
-                            break;
-                    }
-                }
-                catch 
-                {
-                    
+                        controls[controlName] =  c;
+                        vars.Logt("control found", controlName);
+                        return (LiveSplit.UI.Components.ILayoutComponent)c;
                 }
             }
-            if (control == null)
+            catch 
             {
-                controls[controlName]= control = LiveSplit.UI.Components.ComponentManager.LoadLayoutComponent("LiveSplit.Text.dll",timer);
-                vars.Logt("control created", controlName);
+                
             }
-            if (!timer.Layout.LayoutComponents.Contains(control))
-            {
-                vars.Logt("control added", controlName);
-                timer.Layout.LayoutComponents.Add(control);
-            }
+        }
+        return null;
+    });
+    // find or create control
+    vars.GetControl = (Func<String,object>)((controlName)=>
+    {
+        LiveSplit.UI.Components.ILayoutComponent control = vars.FindControl(controlName);
+        if (control == null)
+        {
+            controls[controlName]= control = LiveSplit.UI.Components.ComponentManager.LoadLayoutComponent("LiveSplit.Text.dll",timer);
+            vars.Logt("control created", controlName);
+        }
+        if (!timer.Layout.LayoutComponents.Contains(control))
+        {
+            vars.Logt("control added", controlName);
+            timer.Layout.LayoutComponents.Add(control);
         }
         return (object)control;
 
@@ -99,80 +106,96 @@ startup
 
     #region Update textboxes
 
-    vars.SetText = (Action<String,String>)((Value1,Value2)=>
+    vars.SetText = (Func<String,String,object>)((Value1,Value2)=>
     {
         dynamic component = vars.GetControl(Value1).Component;
         component.Settings.Text1 = Value1;
         if (Value2!=null)
             component.Settings.Text2 = Value2;    
+        return component;
+    });
+
+    vars.RemoveControl = (Action<String>)((controlName)=>
+    {
+        var control = vars.FindControl(controlName);
+        // if (control == null)// for some reason livesplit hates returning nothing;
+        //     return;
+        if (control != null) 
+        {
+            vars.Log("removing");
+            controls.Remove(controlName);
+            var components = (ICollection<LiveSplit.UI.Components.ILayoutComponent>) timer.Layout.LayoutComponents;
+            components.Remove(control);
+        }
+            
+        
+
+
     });
 
 
-    vars.SetColor = (Action<String,System.Drawing.Color>)((controlName,color)=>
+    vars.SetColor = (Func<String,System.Drawing.Color,object>)((controlName,color)=>
     {
         dynamic component = vars.GetControl(controlName).Component;
         component.Settings.OverrideTextColor = true;
         component.Settings.TextColor = color;
         component.Settings.OverrideTimeColor = true;
         component.Settings.TimeColor = color;
+        return component;
     });
 
 
-    vars.DisplayColoredText = (Action<String,String,bool>)((value1,value2,isGreen) =>
+    vars.DisplayColoredText = (Func<String,String,bool,object>)((value1,value2,isGreen) =>
     {
         vars.SetColor(value1,isGreen ? vars.Green : vars.White);
-        vars.SetText(value1,value2);
+        return vars.SetText(value1,value2);
 
     });
 
 
-    vars.DisplayStatues = (Action<bool[]>) ((values) =>
+    vars.DisplayStatues = (Action<bool[],bool[]>) ((display,values) =>
     {
-        vars.SetText("Statues",null);
+        bool displayTitle = false;
+        foreach (var d in display)
+            displayTitle |= d;
+        
+        if (displayTitle)
+        { 
+            vars.SetText("Statues",null);
+        }
+        else
+        { 
+            vars.RemoveControl("Statues");
+        }
         if(values.Length == vars.statueNames.Length)
         {
             for (int i = 0;i< values.Length;i++)
             {
-                vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
+                if (display[i])
+                {
+                    vars.DisplayColoredText(vars.statueNames[i]," ", values[i]);
+                }
+                else
+                {
+                    vars.RemoveControl(vars.statueNames[i]);
+                }
             }
         }
     });
 
 
-    vars.DisplayGreatSouls = (Action<bool,int,bool,bool>)((lostSinner,freyja,ironKing,rotten)=>
-    {
-        var count = (lostSinner ? 1 : 0) + 
-                    (freyja == 2 ? 1 : 0) +
-                    (ironKing ? 1 : 0) +
-                    (rotten ? 1 : 0);
-        
-        vars.DisplayColoredText("Great souls",count.ToString() + (freyja == 1 ? " (hank! the red orb!)" : ""),count ==4);
-    });
-
-    vars.DisplayGilliganInMajula = (Action<bool>) ((isInMajula) =>
-    {
-        vars.SetColor("Laddersmith Gilligan In majula",isInMajula ? vars.Green : vars.White);
-        vars.SetText("Laddersmith Gilligan In majula"," ");
-    });
-
     vars.DisplayKeyItems= (Action<int[]>) ((items)=>
     {
         const int SOLDIERS_KEY = 0x03041840;
-        const int KINGS_PASSAGE = 0x03043F50;
         const int BASTILLE_KEY = 0x03072580;
         const int ANTIQUATED_KEY = 0x0307C1C0;
         const int ROTUNDA_LOCKSTONE = 0x03088510;
-        const int GIANTS_KINSHIP = 0x0308AC20;
         const int ASHEN_MIST_HEART = 0x0308D330;
-        const int SILVERCAT_RING = 0x0268C2A0;
-        const int FLYING_FELINE_BOOTS = 0x01477487;
         const int LENIGRAST_KEY = 0X030836F0;
+        const int KINGS_PASSAGE = 0x03043F50;
 
         vars.SetText("Key items",null);
-        vars.DisplayColoredText( "Silver cat ring"," ",items.Contains(SILVERCAT_RING));
-        vars.DisplayColoredText( "Flying feline boots"," ",items.Contains(FLYING_FELINE_BOOTS));
         vars.DisplayColoredText( "Rotunda lockstone"," ",items.Contains(ROTUNDA_LOCKSTONE));
-        vars.DisplayColoredText( "Giant's Kinship"," ",items.Contains(GIANTS_KINSHIP));
         vars.DisplayColoredText( "Soldier key"," ",items.Contains(SOLDIERS_KEY));
         vars.DisplayColoredText( "King's passage"," ",items.Contains(KINGS_PASSAGE));
         // vars.DisplayColoredText( "Bastille key"," ",items.Contains(BASTILLE_KEY));
@@ -180,29 +203,78 @@ startup
         vars.DisplayColoredText( "Lenigrast key"," ",items.Contains(LENIGRAST_KEY));
     });
 
-    vars.DisplaySoulMemory = (Action<int>)((value)=>
+    vars.DisplayEndGame = (Action<int[]>)((items)=>
     {
-        vars.DisplayColoredText("Soul memory",value.ToString(), value >= 1000000);
+
+        const int GIANTS_KINSHIP = 0x0308AC20;
+        const int KINGS_RING = 0x026A2230;
+
+
+        var giantKinship = items.Contains(GIANTS_KINSHIP);
+        var kingsRing = items.Contains(KINGS_RING);
+
+        var control = vars.DisplayColoredText("End game",
+            String.Format("[{0}]king's ring + [{1}]giant's  kinship",
+                kingsRing ? "✔": " " ,
+                giantKinship ? "✔": " "),
+                giantKinship && kingsRing
+
+            );
+        control.Settings.Display2Rows = true;
+
+    });
+    vars.DisplayBlackGulch = (Action<int[],bool>)((items,gilligan)=>
+    {
+
+        const int SILVERCAT_RING = 0x0268C2A0;
+        const int FLYING_FELINE_BOOTS = 0x01477487;
+        
+        var silverCatRing = items.Contains(SILVERCAT_RING);
+        var flyingFelineBoots = items.Contains(FLYING_FELINE_BOOTS);
+
+        var control = vars.DisplayColoredText("Black gulch", 
+        String.Format("[{0}]SCR / [{1}]FFB / [{2}]Gilligan",
+            silverCatRing ? "✔": " ",
+            flyingFelineBoots ? "✔": " ",
+            gilligan ? "✔": " "),
+            silverCatRing || flyingFelineBoots || gilligan);
+
+        control.Settings.Display2Rows = true;
     });
 
-    
+    vars.DisplayShrineOfWinter = (Action<int,bool,int,bool,bool>)((soulMemory,lostSinner,freyja,ironKing,rotten)=>
+    {
+
+        var count = (lostSinner ? 1 : 0) + 
+                    (freyja == 2 ? 1 : 0) +
+                    (ironKing ? 1 : 0) +
+                    (rotten ? 1 : 0);
+        var control = vars.DisplayColoredText("Shrine of winter", String.Format("SM {0} / GS {1}{2}",
+                                                                    soulMemory,
+                                                                    count,
+                                                                    (freyja == 1 ? " (hank! the red orb!)" : "")),
+                                count == 4 || soulMemory > 1000000
+                                                                    );
+        control.Settings.Display2Rows = true;
+
+    });
+
     #endregion
 
     #region Correct timing method
          
     if (timer.CurrentTimingMethod != TimingMethod.GameTime)
     {
-        if (DialogResult.Yes ==  
-            MessageBox.Show("This split uses GameTime as timing method, switch now?",
-            "LiveSplit : Eldenring boss timer",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question))
+        // if (DialogResult.Yes ==  
+        //     MessageBox.Show("This split uses GameTime as timing method, switch now?",
+        //     "LiveSplit : Eldenring boss timer",
+        //     MessageBoxButtons.YesNo,
+        //     MessageBoxIcon.Question))
         {
             timer.CurrentTimingMethod = TimingMethod.GameTime;
         }
     }
     #endregion
-
 
     #region memory functions
     // from CE table at https://github.com/boblord14/Dark-Souls-2-SotFS-CT-Bob-Edition
@@ -384,6 +456,7 @@ startup
     vars.GetGilligan = (Func<Process,IntPtr,bool>) ((proc,baseAddress) =>
     {
         return vars.ReadWorldEvent(proc,baseAddress,vars.gilliganInMajulaFlag[0],vars.gilliganInMajulaFlag[1]);
+        
     });
 
 
@@ -450,14 +523,22 @@ startup
 
     #endregion
 
+    #region Config
+    settings.Add("Compact");
+    settings.Add("Statues");
+    foreach (var statue in vars.statueNames)
+    {
+        settings.Add(statue,true,statue,"Statues");
+    }
+    #endregion
+
     #region Init controls
-    vars.SetText("Shrine of winter","");
-    vars.DisplaySoulMemory(0);
-    vars.DisplayGreatSouls(false,0,false,false);
+    vars.DisplayShrineOfWinter(0,false,0,false,false);
+    vars.DisplayBlackGulch(new int[]{},false);
+    vars.DisplayEndGame(new int[]{});
     vars.DisplayKeyItems(new int[]{});
-    vars.DisplayGilliganInMajula(false);
     vars.CreateSeparator(false);
-    vars.DisplayStatues(new bool[vars.statueNames.Length]);
+    // vars.DisplayStatues(false,new bool[vars.statueNames.Length]);
     #endregion
 
 }
@@ -473,31 +554,31 @@ init
 update
 {
     // great souls
-    vars.DisplayGreatSouls(vars.ReadLostSinner(game,vars.BaseAddress),
+    vars.DisplayShrineOfWinter(vars.ReadSoulMemory(game,vars.BaseAddress),
+                            vars.ReadLostSinner(game,vars.BaseAddress),
                             vars.ReadFreyja(game,vars.BaseAddress),
                             vars.ReadIronKing(game,vars.BaseAddress),
                             vars.ReadRotten(game,vars.BaseAddress));
 
 
-    // soul memory
-    var soulMemory = vars.ReadSoulMemory(game,vars.BaseAddress);
-    vars.DisplaySoulMemory(soulMemory);
 
     // key items
     var items = vars.ReadInventory(game,vars.BaseAddress);
-    vars.DisplayKeyItems(items);
-
-    // is gilligan inn majula
     var gilligan = vars.GetGilligan(game,vars.BaseAddress);
-    vars.DisplayGilliganInMajula(gilligan);
+    vars.DisplayBlackGulch(items,gilligan);
+    vars.DisplayEndGame(items);
+    vars.DisplayKeyItems(items);
 
     // petrified statues
     var values = new bool[vars.statueOffsets.GetLength(0)];
+    var display = new bool[vars.statueOffsets.GetLength(0)];
     for (int i = 0;i< vars.statueOffsets.GetLength(0);i++)
     {
         values[i] = vars.GetStatue(game,vars.BaseAddress,i);
+        display[i] = settings[vars.statueNames[i]];
     }
-    vars.DisplayStatues(values);
+
+    vars.DisplayStatues(display,values);
 }
 
 onReset
