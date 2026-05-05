@@ -541,6 +541,11 @@ startup
     // vars.DisplayStatues(false,new bool[vars.statueNames.Length]);
     #endregion
 
+    #region init run
+    timer.Run.GameName = "Dark Souls II: Scholar of the First Sin";
+    timer.Run.CategoryName = "Archipelago";
+    #endregion
+
 }
 
 init
