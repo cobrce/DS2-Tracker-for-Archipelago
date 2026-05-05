@@ -547,7 +547,7 @@ init
 {
     vars.Logt("Init","");
     vars.BaseAddress = modules.FirstOrDefault(m => m.ModuleName.ToLower() == "darksoulsii.exe").BaseAddress;
-    vars.Logt("Soul memory", vars.ReadSoulMemory(game,vars.BaseAddress).ToString("x"));
+    vars.Logt("Soul memory", vars.ReadSoulMemory(game,vars.BaseAddress).ToString());
 }
 
 
