@@ -86,14 +86,14 @@ startup
     vars.CreateSeparator = (Action<bool>)((ignoreExistant)=>
     {
         bool found = false;
-            foreach (var c in timer.Layout.LayoutComponents)
+        foreach (var c in timer.Layout.LayoutComponents)
+        {
+            if(c.Component is LiveSplit.UI.Components.SeparatorComponent)
             {
-                if(c.Component is LiveSplit.UI.Components.SeparatorComponent)
-                {
-                    vars.Logt("Sperator", "Existing");
-                    found = true;
-                    break;
-                }
+                vars.Logt("Sperator", "Existing");
+                found = true;
+                break;
+            }
         }
         if (ignoreExistant || !found)
         {
