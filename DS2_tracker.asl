@@ -83,6 +83,34 @@ startup
 
     });
 
+    vars.CreateTitle = (Action)(()=>
+    {
+        bool found = false;
+        LiveSplit.UI.Components.ILayoutComponent title = null;
+        foreach (var c in timer.Layout.LayoutComponents)
+        {
+            if (c.Component.GetType().Assembly.FullName.StartsWith("LiveSplit.Title"))
+            {
+                found = true;
+                title = c;
+            }
+        }
+
+        if (!found)
+        {
+            title = LiveSplit.UI.Components.ComponentManager.LoadLayoutComponent("LiveSplit.Title.dll",timer);
+            timer.Layout.LayoutComponents.Add(title);
+        }
+
+        dynamic comp = title.Component;
+        comp.Settings.ShowGameName = true;
+        comp.Settings.ShowCategoryName = true;
+        comp.Settings.ShowAttemptCount = false;
+        comp.Settings.SingleLine = true;
+        comp.Settings.BackgroundColor = System.Drawing.Color.Black;
+        comp.Settings.BackgroundColor2 = System.Drawing.Color.FromArgb(0,0,0,0);
+    });
+
     vars.CreateSeparator = (Action<bool>)((ignoreExistant)=>
     {
         bool found = false;
@@ -533,6 +561,7 @@ startup
     #endregion
 
     #region Init controls
+    vars.CreateTitle();
     vars.DisplayShrineOfWinter(0,false,0,false,false);
     vars.DisplayBlackGulch(new int[]{},false);
     vars.DisplayEndGame(new int[]{});
