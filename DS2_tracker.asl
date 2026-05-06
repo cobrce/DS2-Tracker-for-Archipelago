@@ -553,6 +553,8 @@ init
     vars.Logt("Init","");
     vars.BaseAddress = modules.FirstOrDefault(m => m.ModuleName.ToLower() == "darksoulsii.exe").BaseAddress;
     vars.Logt("Soul memory", vars.ReadSoulMemory(game,vars.BaseAddress).ToString());
+    var icon = System.Drawing.Icon.ExtractAssociatedIcon(game.MainModule.FileName);
+    timer.Run.GameIcon = icon.ToBitmap();
 }
 
 
