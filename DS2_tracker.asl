@@ -589,6 +589,8 @@ init
 
 update
 {
+    if(!vars.IsInGame(game,vars.BaseAddress))
+        return;
     // great souls
     vars.DisplayShrineOfWinter(vars.ReadSoulMemory(game,vars.BaseAddress),
                             vars.ReadLostSinner(game,vars.BaseAddress),
