@@ -53,7 +53,7 @@ startup
                 dynamic comp = c.Component;
                 if (comp.Settings.Text1 == controlName)
                 {
-                        controls[controlName] =  c;
+                        // controls[controlName] =  c;
                         vars.Logt("control found", controlName);
                         return (LiveSplit.UI.Components.ILayoutComponent)c;
                 }
